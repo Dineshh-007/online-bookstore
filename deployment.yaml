@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: online-bookstore
-          image: dineshh007/online-bookstore:v1
+          image: dineshh007/online-bookstore:v2
           ports:
             - containerPort: 80
 ---
