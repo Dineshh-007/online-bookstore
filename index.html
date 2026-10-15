@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PageTurner Bookstore</title>
+    <style>
+        body { font-family: Arial; background: #f5f3ef; margin: 0; }
+        header, footer { background: #283c35; color: white; padding: 20px; }
+        main { padding: 20px; }
+        .books { display: flex; flex-wrap: wrap; gap: 15px; }
+        .book { background: white; padding: 15px; border-radius: 8px; width: 200px; }
+        button { padding: 8px; background: #315b49; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📚 PageTurner Online Bookstore</h1>
+        <p>Cart: <span id="count">0</span></p>
+    </header>
+
+    <main>
+        <h2>Browse Books</h2>
+        <input id="search" placeholder="Search title or author" oninput="displayBooks()">
+        <select id="category" onchange="displayBooks()">
+            <option value="">All Categories</option>
+            <option>Technology</option>
+            <option>Fiction</option>
+            <option>Business</option>
+            <option>Science</option>
+            <option>Academic</option>
+        </select>
+
+        <div id="books" class="books"></div>
+
+        <h2>Shopping Cart</h2>
+        <ul id="cart"></ul>
+        <button onclick="checkout()">Place Order</button>
+        <p id="status">No order placed.</p>
+    </main>
+
+    <footer>PageTurner — Read. Discover. Grow.</footer>
+
+    <script>
+        const books = [
+            ["Clean Code", "Robert Martin", "Technology", 650],
+            ["The Pragmatic Programmer", "David Thomas", "Technology", 720],
+            ["The Alchemist", "Paulo Coelho", "Fiction", 350],
+            ["1984", "George Orwell", "Fiction", 299],
+            ["Atomic Habits", "James Clear", "Business", 499],
+            ["A Brief History of Time", "Stephen Hawking", "Science", 450],
+            ["Introduction to Algorithms", "Thomas Cormen", "Academic", 950],
+            ["Thinking, Fast and Slow", "Daniel Kahneman", "Business", 550]
+        ];
+
+        let cart = [];
+
+        function displayBooks() {
+            const query = document.getElementById("search").value.toLowerCase();
+            const category = document.getElementById("category").value;
+
+            document.getElementById("books").innerHTML = books
+                .filter(b => (b[0] + b[1]).toLowerCase().includes(query))
+                .filter(b => !category || b[2] === category)
+                .map(b => `<div class="book">
+                    <h3>${b[0]}</h3>
+                    <p>Author: ${b[1]}</p>
+                    <p>Category: ${b[2]}</p>
+                    <p>Price: ₹${b[3]}</p>
+                    <p>Availability: In Stock</p>
+                    <button onclick="addToCart('${b[0]}')">Add to Cart</button>
+                </div>`).join("");
+        }
+
+        function addToCart(title) {
+            cart.push(title);
+            document.getElementById("count").textContent = cart.length;
+            document.getElementById("cart").innerHTML =
+                cart.map(item => `<li>${item}</li>`).join("");
+        }
+
+        function checkout() {
+            if (!cart.length) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            document.getElementById("status").textContent =
+                "Order placed successfully! Status: Confirmed.";
+            cart = [];
+            document.getElementById("count").textContent = 0;
+            document.getElementById("cart").innerHTML = "";
+        }
+
+        displayBooks();
+    </script>
+</body>
+</html>
